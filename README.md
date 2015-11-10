@@ -18,7 +18,7 @@ To add the badge to the README of your private repo projects you could use the f
 ```
 
 ## How does it work?
-Since there isn't any way to determine if the pipeline has completed or store the status of the last run stage in the pipeline on the badge server and return a badge based on that.
+Since there isn't any (universal) way to determine if the pipeline has completed or not. We store the status of the latest completed stage in the pipeline on the badge server and return a badge (Passed / Failed / Unknown) based on that.
 
 ## License
 
