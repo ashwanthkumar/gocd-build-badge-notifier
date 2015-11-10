@@ -1,0 +1,6 @@
+<div class="form_item_block">
+    <label>Build Badge Server URL: <span class="asterisk">*</span></label>
+    <input type="text" ng-model="server_base_url" ng-required="true"/>
+    <span class="form_error" ng-show="GOINPUTNAME[server_base_url].$error.server">{{ GOINPUTNAME[server_base_url].$error.server }}</span>
+    <p>More information available on <a href="https://github.com/ashwanthkumar/gocd-build-badge-server">Github</a></p>
+</div>
