@@ -14,6 +14,7 @@ import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.*;
 
 import static java.util.Arrays.asList;
@@ -207,8 +208,9 @@ public class GoBuildBadgeNotificationPlugin implements GoPlugin {
                 Map<String, String> payload = new HashMap<String, String>();
                 payload.put("pipeline", message.getPipelineName());
                 payload.put("status", message.getStageResult());
-                LOGGER.info("Doing payload POST to (" + badgeServerUrl + "/status" + ") with " + toJSON(payload));
-                String notificationResponse = Unirest.post(badgeServerUrl + "/status")
+                String urlToPost = buildURL(badgeServerUrl);
+                LOGGER.info("Doing payload POST to (" + urlToPost + ") with " + toJSON(payload));
+                String notificationResponse = Unirest.post(urlToPost)
                         .header("Accept", "application/json")
                         .header("Content-Type", "application/json")
                         .body(toJSON(payload))
@@ -231,6 +233,10 @@ public class GoBuildBadgeNotificationPlugin implements GoPlugin {
             response.put("messages", messages);
         }
         return renderJSON(responseCode, response);
+    }
+
+    private String buildURL(String badgeServerUrl) {
+        return URI.create(badgeServerUrl + "/status").normalize().toString();
     }
 
     private boolean isEmpty(String str) {
