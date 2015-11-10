@@ -14,7 +14,7 @@ You need to set a URL to an instance of [build badge server](https://github.com/
 To add the badge to the README of your private repo projects you could use the following template. Make sure you update the `HOST_OF_BADGE_SERVER` and `Pipeline-Name`.
 
 ```markdown
-[![Build Stats](https://HOST_OF_BADGE_SERVER.com/badge/Pipeline-Name)](http://ci-server:8153/go/tab/pipeline/history/Pipeline-Name)
+[![Build Status](https://HOST_OF_BADGE_SERVER.com/badge/Pipeline-Name)](http://ci-server:8153/go/tab/pipeline/history/Pipeline-Name)
 ```
 
 ## How does it work?
