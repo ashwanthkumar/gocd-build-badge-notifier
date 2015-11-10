@@ -1,56 +1,24 @@
-# gocd-slack-build-notifier
-Slack based GoCD build notifier
-
-![Demo](images/gocd-slack-notifier-demo.png)
+# gocd-build-badge-notifier
+Plugin notifies all pipeline build status to an instance of [Build Badge notifier](https://github.com/ashwanthkumar/gocd-build-badge-server).
 
 ## Setup
-Download jar from releases & place it in /plugins/external & restart Go Server.
+- Download jar from releases & place it in /plugins/external & restart Go Server.
+- Make sure you have an instance of [build badge server](https://github.com/ashwanthkumar/gocd-build-badge-server) running. The README has 1-click deploy to Heroku.
 
 ## Configuration
-All configurations are in [HOCON](https://github.com/typesafehub/config) format. Create a file `go_notify.conf` in the server user's (typically /var/go/) home directory. Minimalistic configuration would be something like
-```hocon
-gocd.slack {
-  login = "someuser"
-  password = "somepassword"
-  server-host = "http://localhost:8153/"
-  webhookUrl = "https://hooks.slack.com/services/...."
+You need to set a URL to an instance of [build badge server](https://github.com/ashwanthkumar/gocd-build-badge-server).
 
-  # optional fields
-  channel = "#build"
-  slackDisplayName = "gocd-slack-bot"
-  slackUserIconURL = "http://example.com/slack-bot.png"
-}
+![Demo](images/configuration-screen.png)
+
+## Markdown Syntax
+To add the badge to the README of your private repo projects you could use the following template. Make sure you update the `HOST_OF_BADGE_SERVER` and `Pipeline-Name`.
+
+```markdown
+[![Build Stats](https://HOST_OF_BADGE_SERVER.com/badge/Pipeline-Name)](http://ci-server:8153/go/tab/pipeline/history/Pipeline-Name)
 ```
-- `login` - Login for a Go user who is authorized to access the REST API.
-- `password` - Password for the user specified above. You might want to create a less privileged user for this plugin.
-- `server-host` - FQDN of the Go Server. All links on the slack channel will be relative to this host.
-- `webhookUrl` - Slack Webhook URL
-- `channel` - Override the default channel where we should send the notifications in slack. You can also give a value starting with `@` to send it to any specific user.
 
-## Pipline Rules
-By default the plugin pushes a note about all failed stages across all pipelines to Slack. You have fine grain control over this operation.
-```hocon
-gocd.slack {
-  server-host = "http://localhost:8153/"
-  webhookUrl = "https://hooks.slack.com/services/...."
-
-  pipelines = [{
-    name = ".*"
-    stage = ".*"
-    state = "failed"
-  },{
-    name = "gocd-slack-build"
-    stage = "build"
-    state = "failed|passed"
-    channel = "#oss-build-group"
-  }]
-}
-```
-`gocd.slack.pipelines` contains all the rules for the go-server. It is a list of rules (see below for what the parameters mean) for various pipelines.
-- `name` - Regex to match the pipeline name
-- `stage` - Regex to match the stage name
-- `state` - State of the pipeline at which we should send a notification. You can provide multiple values separated by pipe (`|`) symbol. Valid values are passed, failed, cancelled, building, fixed, broken or all.
-- `channel` - (Optional) channel where we should send the slack notification. This setting for a rule overrides the global setting
+## How does it work?
+Since there isn't any way to determine if the pipeline has completed or store the status of the last run stage in the pipeline on the badge server and return a badge based on that.
 
 ## License
 
